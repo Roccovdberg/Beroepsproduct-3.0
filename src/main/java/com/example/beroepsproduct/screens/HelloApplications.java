@@ -58,14 +58,6 @@ public class HelloApplications {
         
         gridPane.getChildren().addAll(inloggen, usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton, naarHomescreen);
 
-        // Centreren van de GridPane in het midden bovenin
-        gridPane.setTranslateX((scene.getWidth() - gridPane.getBoundsInParent().getWidth()) / 2);
-        gridPane.setTranslateY(50);
-
-        scene = new Scene(gridPane);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toString());
-
-
     }
 
     public HelloApplications(Scene scene) {

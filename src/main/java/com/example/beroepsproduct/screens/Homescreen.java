@@ -56,16 +56,17 @@ public class Homescreen {
         VBox content = new VBox(10);
         content.setPrefWidth(whitespace / 2);
         //Producten ophalen uit de database en laten zien
-        //       try {
-        //Database connector = new Database("127.0.0.1", "50004", "beroepsproduct", "root", "");
-        //ResultSet producten = connector.query("SELECT * FROM product");
+               try {
+                   Class.forName("jdbc:mysql:cj.jdbc.Driver");
+        Database connector = new Database("127.0.0.1", "3306", "beroepsproduct", "root", "");
+        ResultSet producten = connector.query("SELECT * FROM product");
 
-//            while (producten.next()) {
-//                content.getChildren().add(new Product(producten).show());
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+                   while (producten.next()) {
+                       content.getChildren().add(new Product(producten).show());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         scrollPane.setContent(content);
         sidebar.getChildren().addAll(logo, Toevoegen);
