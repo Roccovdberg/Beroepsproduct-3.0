@@ -54,7 +54,7 @@ public class HelloApplications {
             Homescreen homescreen = new Homescreen(stage);
             stage.setScene(homescreen.getScene());  // Roep getScene() aan op de Homescreen-instantie
             stage.show();
-        });
+        });hoi
         
         gridPane.getChildren().addAll(inloggen, usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton, naarHomescreen);
 
