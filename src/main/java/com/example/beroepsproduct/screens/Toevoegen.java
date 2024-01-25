@@ -1,15 +1,16 @@
 package com.example.beroepsproduct.screens;
-
+import com.example.beroepsproduct.classes.Database;
+import java.time.LocalDate;
+import java.util.Date;
 import com.example.beroepsproduct.classes.Database;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
-import java.util.Date;
 
 public class Toevoegen {
     private final Scene scene;
@@ -34,13 +35,15 @@ public class Toevoegen {
         Label UitleendatumLabel = new Label("Datum van uitlenen:");
         GridPane.setConstraints(UitleendatumLabel, 0, 1);
 
-        TextField uitleendatumInput = new TextField();
+        DatePicker uitleendatumInput = new DatePicker();
+        uitleendatumInput.setPromptText("dd-MM-YYYY");
         GridPane.setConstraints(uitleendatumInput, 1, 1);
 
         Label TeruggeefdatumLabel = new Label("Datum van teruggave:");
         GridPane.setConstraints(TeruggeefdatumLabel, 0, 2);
 
-        TextField teruggeefdatumInput = new TextField();
+        DatePicker teruggeefdatumInput = new DatePicker();
+        teruggeefdatumInput.setPromptText("dd-MM-YYYY");
         GridPane.setConstraints(teruggeefdatumInput, 1, 2);
 
         Label BeschrijvingLabel = new Label("Productbeschrijving:");
@@ -65,11 +68,10 @@ public class Toevoegen {
 
         voegToe.setOnAction(e -> {
             String productNaam = naamInput.getText();
-            Date productUitleendatum = uitleendatumInput.getText();
-            Date productTeruggeefdatum = teruggeefdatumInput.getText();
+            LocalDate productUitleendatum = uitleendatumInput.getValue();
+            LocalDate productTeruggeefdatum = teruggeefdatumInput.getValue();
             String productBeschrijving = beschrijvingInput.getText();
             String productAdres = ProductadresInput.getText();
-
             db.VoegProductToe(productNaam, productUitleendatum, productTeruggeefdatum, productBeschrijving, productAdres);
         });
 

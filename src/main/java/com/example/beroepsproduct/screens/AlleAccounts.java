@@ -1,4 +1,4 @@
 package com.example.beroepsproduct.screens;
 
-public class ProductToevoegen {
+public class AlleAccounts {
 }

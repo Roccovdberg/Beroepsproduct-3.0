@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Product {
+public class Product extends Node {
 
     private Statement stm;
     private Database db;
@@ -36,4 +36,8 @@ public class Product {
 
     }
 
+    @Override
+    public Node getStyleableNode() {
+        return super.getStyleableNode();
+    }
 }

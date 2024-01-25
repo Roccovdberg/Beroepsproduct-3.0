@@ -13,8 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Homescreen {
     private final Scene scene;
@@ -36,13 +35,17 @@ public class Homescreen {
 
         // Titel van de applicatie rechts boven in het scherm
         Label logo = new Label("MyTurn");
-        logo.setPrefSize(sidebar.getMaxWidth(), 56);
-        logo.setStyle("-fx-background-color: #000000;");
+        logo.setPrefSize(sidebar.getMaxWidth(), 80);
+        logo.setStyle("-fx-background-color: #ffffff;");
         logo.setAlignment(Pos.CENTER);
 
         Button Toevoegen = new Button("Product Toevoegen");
-        Toevoegen.setStyle("-fx-background-color: #000000;");
-
+        Toevoegen.setStyle("-fx-background-color: #ff0000;");
+        Toevoegen.setOnAction(e -> {
+            Toevoegen toevoegen = new Toevoegen(stage);
+            stage.setScene(toevoegen.getScene());
+            stage.show();
+        });
         double whitespace = scene.getWidth() - sidebar.getMaxWidth();
 
         // Flowpane waar de toegevoegde producten in komen te staan
@@ -57,12 +60,10 @@ public class Homescreen {
 
         // Producten ophalen uit de database en laten zien
         try {
-            Database connector = new Database("127.0.0.1", "3306", "beroepsproduct", "root", "");
-            ResultSet producten = connector.query("SELECT * FROM product");
+            Database connector = new Database();
+            ResultSet producten = connector.getConnection().createStatement().executeQuery("SELECT * FROM product");
 
-            while (producten.next()) {
-                content.getChildren().add(new Product(producten).show());
-            }
+            while (producten.next()) content.getChildren().add(new Product(producten));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

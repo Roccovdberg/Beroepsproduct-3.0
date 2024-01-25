@@ -1,8 +1,10 @@
 package com.example.beroepsproduct;
 
+import com.example.beroepsproduct.screens.Homescreen;
 import com.example.beroepsproduct.screens.Login;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,44 +20,52 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        // GridPane voor het opmaken van de lay-out
         GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(20, 20, 20, 20));
+        gridPane.setPadding(new Insets(20));
         gridPane.setVgap(10);
+        gridPane.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(gridPane, 800, 600);
-//Button om een account aan te maken
-        Inloggen = new Button("Maak account aan");
-        GridPane.setConstraints(Inloggen, 1, 2); // Rij 2, Kolom 1
-        Inloggen.setOnAction(e -> {
-            //Login screen2 = new Login(stage);
+        // Scene initialiseren met de GridPane
+        Scene scene = new Scene(gridPane, 800, 800);
+
+        // Gebruikersnaam label en inputveld
+        Label usernameLabel = new Label("Gebruikersnaam:");
+        TextField usernameInput = new TextField();
+
+        // Wachtwoord label en inputveld
+        Label passwordLabel = new Label("Wachtwoord:");
+        PasswordField passwordInput = new PasswordField();
+
+        // Button om een account aan te maken
+        Button inloggen = new Button("Maak account aan");
+        inloggen.setOnAction(e -> {
             stage.setScene(new Login(stage).getScene());
             stage.show();
-//            stage.setScene(screen2.getScene());
-
         });
 
-        Label usernameLabel = new Label("Gebruikersnaam:");
-        GridPane.setConstraints(usernameLabel, 0, 0);
-
-        TextField usernameInput = new TextField();
-        GridPane.setConstraints(usernameInput, 1, 0);
-
-        Label passwordLabel = new Label("Wachtwoord:");
-        GridPane.setConstraints(passwordLabel, 0, 1);
-
-        PasswordField passwordInput = new PasswordField();
-        GridPane.setConstraints(passwordInput, 1, 1);
-
+        // Inloggen button
         Button loginButton = new Button("Inloggen");
-        GridPane.setConstraints(loginButton, 1, 3); // Rij 3, Kolom 1
         loginButton.setOnAction(e -> handleLogin(usernameInput.getText(), passwordInput.getText()));
 
-        gridPane.getChildren().addAll(Inloggen, usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton);
+        // Button om naar het homescreen te gaan
+        Button naarHomescreen = new Button("Homepage!");
+        naarHomescreen.setOnAction(e -> {
+            Homescreen homescreen = new Homescreen(stage);
+            stage.setScene(homescreen.getScene());
+            stage.show();
+        });
 
-        // Centreren van de GridPane in het midden bovenin
-        gridPane.setTranslateX((scene.getWidth() - gridPane.getBoundsInParent().getWidth()) / 2);
-        gridPane.setTranslateY(50);
+        // Elementen toevoegen aan de GridPane
+        gridPane.add(usernameLabel, 0, 0);
+        gridPane.add(usernameInput, 1, 0);
+        gridPane.add(passwordLabel, 0, 1);
+        gridPane.add(passwordInput, 1, 1);
+        gridPane.add(inloggen, 0, 2);
+        gridPane.add(loginButton, 1, 2);
+        gridPane.add(naarHomescreen, 0, 3);
 
+        // Titel instellen en Scene tonen
         stage.setTitle("MyTurn");
         stage.setScene(scene);
         stage.show();
@@ -64,9 +74,5 @@ public class HelloApplication extends Application {
     private void handleLogin(String username, String password) {
         // Plaats hier je login validatie logica
         System.out.println("Inlogpoging met gebruikersnaam: " + username + " en wachtwoord: " + password);
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }

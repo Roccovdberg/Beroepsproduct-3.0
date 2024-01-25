@@ -16,11 +16,10 @@ public class Login {
 
     private final Scene scene;
 
+
     public Login(Stage primaryStage) {
         GridPane root = new GridPane();
         root.setPadding(new Insets(20, 20, 20, 20));
-        root.setVgap(10);
-        root.setHgap(10);
 
         scene = new Scene (root, 800, 600);
         primaryStage.setScene(scene);
@@ -29,9 +28,6 @@ public class Login {
 
 
         primaryStage.setTitle("Login Page");
-
-
-
 
 
         Label usernameLabel = new Label("Gebruikersnaam:");
@@ -48,15 +44,14 @@ public class Login {
 
         Button loginButton = new Button("Inloggen");
         GridPane.setConstraints(loginButton, 1, 2);
-//        loginButton.setOnAction(e -> {
-//            primaryStage.setScene(new Homescreen(primaryStage));
-//            primaryStage.show();
-//        });
+        loginButton.setOnAction(e -> {
+            primaryStage.setScene(new Homescreen(primaryStage).getScene());
+            primaryStage.show();
+        });
 
 // ...
 
         root.getChildren().addAll(usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton);
-
 
         //Login l = new Login(primaryStage);
         Inloggen inloggen = new Inloggen();
@@ -70,12 +65,6 @@ public class Login {
             db.Maakaccount(gebruikersNaam, wachtWoord);
         });
 
-
-
-        Scene scene = new Scene(root, 300, 200);
-        primaryStage.setScene(scene);
-
-        primaryStage.show();
     }
 
     public void handleLogin(String username, String password) {
