@@ -36,6 +36,4 @@ public class Product {
 
     }
 
-    public Node show() {
-    }
 }

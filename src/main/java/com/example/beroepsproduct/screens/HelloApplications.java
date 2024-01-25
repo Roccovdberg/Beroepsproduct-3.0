@@ -1,7 +1,5 @@
 package com.example.beroepsproduct.screens;
 
-import com.example.beroepsproduct.screens.Homescreen;
-import com.example.beroepsproduct.screens.Login;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,24 +9,24 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-
 public class HelloApplications {
     private Scene scene;
+
     public HelloApplications(Stage stage) {
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(20, 20, 20, 20));
         gridPane.setVgap(10);
 
-        Scene scene = new Scene(gridPane, 800, 600);
-        //Button om een account aan te maken
+        scene = new Scene(gridPane, 800, 600);
+
+        // Button om een account aan te maken
         Button inloggen = new Button("Maak account aan");
         GridPane.setConstraints(inloggen, 1, 2); // Rij 2, Kolom 1
         inloggen.setOnAction(e -> {
-            //Login screen2 = new Login(stage);
+            // Login screen2 = new Login(stage);
             stage.setScene(new Login(stage).getScene());
             stage.show();
-//            stage.setScene(screen2.getScene());
-
+            // stage.setScene(screen2.getScene());
         });
 
         Label usernameLabel = new Label("Gebruikersnaam:");
@@ -47,17 +45,15 @@ public class HelloApplications {
         GridPane.setConstraints(loginButton, 1, 3); // Rij 3, Kolom 1
         loginButton.setOnAction(e -> handleLogin(usernameInput.getText(), passwordInput.getText()));
 
-
         Button naarHomescreen = new Button("Homepage!");
         GridPane.setConstraints(naarHomescreen, 3, 6); // Rij 2, Kolom 1
         naarHomescreen.setOnAction(e -> {
             Homescreen homescreen = new Homescreen(stage);
-            stage.setScene(homescreen.getScene());  // Roep getScene() aan op de Homescreen-instantie
+            stage.setScene(homescreen.getScene());
             stage.show();
         });
-        
-        gridPane.getChildren().addAll(inloggen, usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton, naarHomescreen);
 
+        gridPane.getChildren().addAll(inloggen, usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton, naarHomescreen);
     }
 
     public HelloApplications(Scene scene) {
