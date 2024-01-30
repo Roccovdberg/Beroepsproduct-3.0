@@ -1,7 +1,5 @@
 package com.example.beroepsproduct.screens;
-import com.example.beroepsproduct.classes.Database;
-import java.time.LocalDate;
-import java.util.Date;
+
 import com.example.beroepsproduct.classes.Database;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -11,6 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class Toevoegen {
     private final Scene scene;
@@ -24,55 +25,64 @@ public class Toevoegen {
         scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Product toevoegen");
-        primaryStage.show();
 
-        Label NaamLabel = new Label("Product Naam:");
-        GridPane.setConstraints(NaamLabel, 0, 0);
+        Label naamLabel = new Label("Product Naam:");
+        GridPane.setConstraints(naamLabel, 0, 0);
 
         TextField naamInput = new TextField();
         GridPane.setConstraints(naamInput, 1, 0);
 
-        Label UitleendatumLabel = new Label("Datum van uitlenen:");
-        GridPane.setConstraints(UitleendatumLabel, 0, 1);
+        Label uitleendatumLabel = new Label("Datum van uitlenen:");
+        GridPane.setConstraints(uitleendatumLabel, 0, 1);
 
         DatePicker uitleendatumInput = new DatePicker();
-        uitleendatumInput.setPromptText("dd-MM-YYYY");
         GridPane.setConstraints(uitleendatumInput, 1, 1);
 
-        Label TeruggeefdatumLabel = new Label("Datum van teruggave:");
-        GridPane.setConstraints(TeruggeefdatumLabel, 0, 2);
+        Label teruggeefdatumLabel = new Label("Datum van teruggave:");
+        GridPane.setConstraints(teruggeefdatumLabel, 0, 2);
 
         DatePicker teruggeefdatumInput = new DatePicker();
-        teruggeefdatumInput.setPromptText("dd-MM-YYYY");
         GridPane.setConstraints(teruggeefdatumInput, 1, 2);
 
-        Label BeschrijvingLabel = new Label("Productbeschrijving:");
-        GridPane.setConstraints(BeschrijvingLabel, 0, 3);
+        Label beschrijvingLabel = new Label("Productbeschrijving:");
+        GridPane.setConstraints(beschrijvingLabel, 0, 3);
 
         TextField beschrijvingInput = new TextField();
         GridPane.setConstraints(beschrijvingInput, 1, 3);
 
-        Label ProductadresLabel = new Label("Uw thuisadres:");
-        GridPane.setConstraints(ProductadresLabel, 0, 4);
+        Label productadresLabel = new Label("Uw thuisadres:");
+        GridPane.setConstraints(productadresLabel, 0, 4);
 
-        TextField ProductadresInput = new TextField();
-        GridPane.setConstraints(ProductadresInput, 1, 4);
+        TextField productadresInput = new TextField();
+        GridPane.setConstraints(productadresInput, 1, 4);
 
         Button voegToe = new Button("Voeg product toe");
         GridPane.setConstraints(voegToe, 1, 5);
 
-        root.getChildren().addAll(NaamLabel, naamInput, UitleendatumLabel, uitleendatumInput, TeruggeefdatumLabel, teruggeefdatumInput,
-                BeschrijvingLabel, beschrijvingInput, ProductadresLabel, ProductadresInput, voegToe);
+        root.getChildren().addAll(naamLabel, naamInput, uitleendatumLabel, uitleendatumInput, teruggeefdatumLabel, teruggeefdatumInput,
+                beschrijvingLabel, beschrijvingInput, productadresLabel, productadresInput, voegToe);
 
         Database db = new Database();
 
         voegToe.setOnAction(e -> {
-            String productNaam = naamInput.getText();
-            LocalDate productUitleendatum = uitleendatumInput.getValue();
-            LocalDate productTeruggeefdatum = teruggeefdatumInput.getValue();
-            String productBeschrijving = beschrijvingInput.getText();
-            String productAdres = ProductadresInput.getText();
-            db.VoegProductToe(productNaam, productUitleendatum, productTeruggeefdatum, productBeschrijving, productAdres);
+            try {
+                String productNaam = naamInput.getText();
+                LocalDate uitleenDatum = uitleendatumInput.getValue();
+                LocalDate teruggeefDatum = teruggeefdatumInput.getValue();
+
+                // Omzetting van LocalDate naar SQL Date
+                Date productUitleendatum = Date.valueOf(uitleenDatum);
+                Date productTeruggeefdatum = Date.valueOf(teruggeefDatum);
+
+                String productBeschrijving = beschrijvingInput.getText();
+                String productAdres = productadresInput.getText();
+
+                // Zorg ervoor dat de productAdres een string is voordat je deze naar de database stuurt.
+                db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                // Mogelijk foutbeheer toevoegen om de gebruiker op de hoogte te stellen van problemen bij het toevoegen van het product.
+            }
         });
 
         primaryStage.show();

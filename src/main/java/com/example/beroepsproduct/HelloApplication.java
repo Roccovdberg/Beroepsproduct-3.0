@@ -1,5 +1,7 @@
 package com.example.beroepsproduct;
 
+import com.example.beroepsproduct.screens.AlleAccounts;
+import com.example.beroepsproduct.screens.Homescreen;
 import com.example.beroepsproduct.screens.Homescreen;
 import com.example.beroepsproduct.screens.Login;
 import javafx.application.Application;
@@ -20,14 +22,16 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        Scene scene = new Scene(new GridPane(), 800, 800);
+        ((GridPane) scene.getRoot()).add(new Homescreen(stage), 0, 0);
+
         // GridPane voor het opmaken van de lay-out
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(20));
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Scene initialiseren met de GridPane
-        Scene scene = new Scene(gridPane, 800, 800);
+
 
         // Gebruikersnaam label en inputveld
         Label usernameLabel = new Label("Gebruikersnaam:");
@@ -43,6 +47,12 @@ public class HelloApplication extends Application {
             stage.setScene(new Login(stage).getScene());
             stage.show();
         });
+        Button alleAccounts = new Button("Bekijk alle accounts");
+        alleAccounts.setOnAction(e -> {
+            stage.setScene(new Scene(new AlleAccounts(stage)));
+            stage.show();
+        });
+
 
         // Inloggen button
         Button loginButton = new Button("Inloggen");
@@ -64,7 +74,7 @@ public class HelloApplication extends Application {
         gridPane.add(inloggen, 0, 2);
         gridPane.add(loginButton, 1, 2);
         gridPane.add(naarHomescreen, 0, 3);
-
+        gridPane.add(alleAccounts, 1, 3);
         // Titel instellen en Scene tonen
         stage.setTitle("MyTurn");
         stage.setScene(scene);

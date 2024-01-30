@@ -4,33 +4,21 @@ import com.example.beroepsproduct.classes.Database;
 import com.example.beroepsproduct.classes.Product;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.sql.*;
 
-public class Homescreen {
-    private final Scene scene;
-
+public class Homescreen extends BorderPane {
     public Homescreen(Stage stage) {
-        Pane root = new Pane();
-        scene = new Scene(root, 1024, 600);
-
-        stage.setTitle("MyTurn");
-        stage.setScene(scene);
-        stage.show();
-
         // Maken van sidebar waar pagina's komen te staan
         FlowPane sidebar = new FlowPane();
         sidebar.setStyle("-fx-background-color: #292c33");
-        sidebar.setPrefSize(140, scene.getHeight());
-        sidebar.setMaxSize(140, scene.getHeight());
+        sidebar.setPrefSize(140, getHeight());
+        sidebar.setMaxSize(140, getHeight());
         sidebar.setOrientation(Orientation.VERTICAL);
 
         // Titel van de applicatie rechts boven in het scherm
@@ -46,17 +34,16 @@ public class Homescreen {
             stage.setScene(toevoegen.getScene());
             stage.show();
         });
-        double whitespace = scene.getWidth() - sidebar.getMaxWidth();
 
         // Flowpane waar de toegevoegde producten in komen te staan
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setStyle("-fx-background-color: #ffffff;");
-        scrollPane.relocate(sidebar.getMaxWidth(), 50);
-        scrollPane.setPrefSize(whitespace / 2, scene.getHeight() - scrollPane.getTranslateY());
+        scrollPane.setPrefSize(500, 500);
 
         // VBox waar de producten in komen te staan
         VBox content = new VBox(10);
-        content.setPrefWidth(whitespace / 2);
+        content.setPrefWidth(400);
+        content.setPrefHeight(400);
 
         // Producten ophalen uit de database en laten zien
         try {
@@ -70,10 +57,7 @@ public class Homescreen {
 
         scrollPane.setContent(content);
         sidebar.getChildren().addAll(logo, Toevoegen);
-        root.getChildren().addAll(sidebar, scrollPane);
-    }
-
-    public Scene getScene() {
-        return scene;
+        setLeft(sidebar);
+        setCenter(scrollPane);
     }
 }
