@@ -31,8 +31,6 @@ public class HelloApplication extends Application {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-
-
         // Gebruikersnaam label en inputveld
         Label usernameLabel = new Label("Gebruikersnaam:");
         TextField usernameInput = new TextField();
@@ -52,7 +50,6 @@ public class HelloApplication extends Application {
             stage.setScene(new Scene(new AlleAccounts(stage)));
             stage.show();
         });
-
 
         // Inloggen button
         Button loginButton = new Button("Inloggen");
@@ -75,6 +72,8 @@ public class HelloApplication extends Application {
         gridPane.add(loginButton, 1, 2);
         gridPane.add(naarHomescreen, 0, 3);
         gridPane.add(alleAccounts, 1, 3);
+
+        scene.setRoot(gridPane);
         // Titel instellen en Scene tonen
         stage.setTitle("MyTurn");
         stage.setScene(scene);

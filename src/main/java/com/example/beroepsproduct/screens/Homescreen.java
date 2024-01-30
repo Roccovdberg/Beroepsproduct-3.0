@@ -49,7 +49,7 @@ public class Homescreen extends BorderPane {
         try {
             Database connector = new Database();
             ResultSet producten = connector.getConnection().createStatement().executeQuery("SELECT * FROM product");
-
+//Pane toevoegen in plaats van producten, en in de pane de content uit database
             while (producten.next()) content.getChildren().add(new Product(producten));
         } catch (SQLException e) {
             throw new RuntimeException(e);
