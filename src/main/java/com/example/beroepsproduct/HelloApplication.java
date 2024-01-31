@@ -2,11 +2,11 @@ package com.example.beroepsproduct;
 
 import com.example.beroepsproduct.screens.AlleAccounts;
 import com.example.beroepsproduct.screens.Homescreen;
-import com.example.beroepsproduct.screens.Homescreen;
 import com.example.beroepsproduct.screens.Login;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,11 +18,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private Button Inloggen;
-
     @Override
+    //Scherm aanmaken
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(new GridPane(), 800, 800);
+        Scene scene = new Scene(new GridPane(), 800, 600);
         ((GridPane) scene.getRoot()).add(new Homescreen(stage), 0, 0);
 
         // GridPane voor het opmaken van de lay-out
@@ -45,6 +44,7 @@ public class HelloApplication extends Application {
             stage.setScene(new Login(stage).getScene());
             stage.show();
         });
+        // Button om alle toegevoegde accounts te bekijken
         Button alleAccounts = new Button("Bekijk alle accounts");
         alleAccounts.setOnAction(e -> {
             stage.setScene(new Scene(new AlleAccounts(stage)));
@@ -59,10 +59,10 @@ public class HelloApplication extends Application {
         Button naarHomescreen = new Button("Homepage!");
         naarHomescreen.setOnAction(e -> {
             Homescreen homescreen = new Homescreen(stage);
-            stage.setScene(homescreen.getScene());
+            Scene homescreenScene = new Scene(homescreen, 800, 600);
+            stage.setScene(homescreenScene);
             stage.show();
         });
-
         // Elementen toevoegen aan de GridPane
         gridPane.add(usernameLabel, 0, 0);
         gridPane.add(usernameInput, 1, 0);
@@ -74,6 +74,7 @@ public class HelloApplication extends Application {
         gridPane.add(alleAccounts, 1, 3);
 
         scene.setRoot(gridPane);
+
         // Titel instellen en Scene tonen
         stage.setTitle("MyTurn");
         stage.setScene(scene);

@@ -64,7 +64,7 @@ public class Toevoegen {
 
         Database db = new Database();
 
-        voegToe.setOnAction(e -> {
+        voegToe.setOnAction(event -> {
             try {
                 String productNaam = naamInput.getText();
                 LocalDate uitleenDatum = uitleendatumInput.getValue();
@@ -76,6 +76,7 @@ public class Toevoegen {
 
                 String productBeschrijving = beschrijvingInput.getText();
                 String productAdres = productadresInput.getText();
+
 
                 // Zorg ervoor dat de productAdres een string is voordat je deze naar de database stuurt.
                 db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
