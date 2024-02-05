@@ -5,18 +5,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Homescreen extends BorderPane {
+
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/beroepsproduct";
+    private static final String DATABASE_USERNAME = "root";
+    private static final String DATABASE_PASSWORD = "";
 
     public Homescreen(Stage stage) {
         // Maken van sidebar waar pagina's komen te staan
@@ -65,6 +66,16 @@ public class Homescreen extends BorderPane {
         ObservableList<Product> productList = getProductsFromDatabase();
         tableView.setItems(productList);
 
+        // Voeg een listener toe om het gedetailleerde scherm te openen wanneer op een item wordt geklikt
+        tableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
+                if (selectedProduct != null) {
+                    showDetailScreen(selectedProduct);
+                }
+            }
+        });
+
         setCenter(tableView); // Voeg de TableView toe aan het midden van het Homescreen
     }
 
@@ -72,29 +83,106 @@ public class Homescreen extends BorderPane {
     private ObservableList<Product> getProductsFromDatabase() {
         ObservableList<Product> productList = FXCollections.observableArrayList();
 
-        // Voorbeeld JDBC-databaseverbinding
-        String url = "jdbc:mysql://localhost:3306/beroepsproduct";
-        String username = "root";
-        String password = "";
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM product;")) {
 
             while (resultSet.next()) {
                 String productNaam = resultSet.getString("productNaam");
-                Date Productuitleendatum = resultSet.getDate("productUitleendatum");
-                Date Productteruggeefbatum = resultSet.getDate("productTeruggeefdatum");
-                String Productbeschrijving = resultSet.getString("productBeschrijving");
-                String Poductadres = resultSet.getString("productAdres");
+                Date productUitleendatum = resultSet.getDate("productUitleendatum");
+                Date productTeruggeefdatum = resultSet.getDate("productTeruggeefdatum");
+                String productBeschrijving = resultSet.getString("productBeschrijving");
+                String productAdres = resultSet.getString("productAdres");
 
-                productList.add(new Product(productNaam, Productuitleendatum, Productteruggeefbatum, Productbeschrijving, Poductadres));
+                productList.add(new Product(productNaam, productUitleendatum, productTeruggeefdatum, productBeschrijving, productAdres));
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return productList;
+    }
+
+    // Methode om het gedetailleerde scherm te tonen
+    private void showDetailScreen(Product product) {
+        Stage detailStage = new Stage();
+        detailStage.setTitle("Productdetails");
+
+        VBox detailLayout = new VBox(10);
+        detailLayout.setAlignment(Pos.CENTER);
+
+        TextField nameTextField = new TextField(product.getProductNaam());
+        DatePicker dateDatePicker = new DatePicker(product.getProductUitleendatum().toLocalDate());
+        DatePicker returnDatePicker = new DatePicker(product.getProductTeruggeefdatum().toLocalDate());
+        TextField descriptionTextField = new TextField(product.getProductBeschrijving());
+        TextField addressTextField = new TextField(product.getProductAdres());
+
+        Button saveButton = new Button("Opslaan");
+        saveButton.setOnAction(e -> {
+            try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
+                String updateQuery = "UPDATE product SET " +
+                        "productNaam = ?, " +
+                        "productUitleendatum = ?, " +
+                        "productTeruggeefdatum = ?, " +
+                        "productBeschrijving = ?, " +
+                        "productAdres = ? " +
+                        "WHERE productNaam = ?";
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                    preparedStatement.setString(1, nameTextField.getText());
+                    preparedStatement.setDate(2, Date.valueOf(dateDatePicker.getValue()));
+                    preparedStatement.setDate(3, Date.valueOf(returnDatePicker.getValue()));
+                    preparedStatement.setString(4, descriptionTextField.getText());
+                    preparedStatement.setString(5, addressTextField.getText());
+                    preparedStatement.setString(6, product.getProductNaam());
+
+                    preparedStatement.executeUpdate();
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            // Sluit het scherm na het opslaan
+            detailStage.close();
+        });
+
+        //Button om een product te verwijderen uit de database
+        Button deleteButton = new Button("Verwijder product");
+        deleteButton.setOnMouseClicked(event -> {
+            try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
+                String deleteQuery = "DELETE FROM product WHERE productNaam =?";
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+                    preparedStatement.setString(1, product.getProductNaam());
+
+                    preparedStatement.executeUpdate();
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            // Sluit het scherm na het verwijderen
+            detailStage.close();
+        });
+
+        detailLayout.getChildren().addAll(
+                new Label("Naam:"),
+                nameTextField,
+                new Label("Uitleendatum:"),
+                dateDatePicker,
+                new Label("Teruggeefdatum:"),
+                returnDatePicker,
+                new Label("Beschrijving:"),
+                descriptionTextField,
+                new Label("Adres:"),
+                addressTextField,
+                saveButton,
+                deleteButton
+        );
+
+        Scene detailScene = new Scene(detailLayout, 400, 400);
+        detailStage.setScene(detailScene);
+        detailStage.show();
     }
 }

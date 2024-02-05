@@ -26,7 +26,6 @@ public class Login {
         primaryStage.setTitle("Login Page");
         primaryStage.show();
 
-
         Label usernameLabel = new Label("Gebruikersnaam:");
         GridPane.setConstraints(usernameLabel, 0, 0);
 
@@ -45,8 +44,6 @@ public class Login {
             primaryStage.setScene(new Homescreen(primaryStage).getScene());
             primaryStage.show();
         });
-
-// ...
 
         root.getChildren().addAll(usernameLabel, usernameInput, passwordLabel, passwordInput, loginButton);
 

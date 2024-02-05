@@ -5,6 +5,7 @@ import com.example.beroepsproduct.classes.Database;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -21,6 +22,14 @@ public class AlleAccounts extends Parent {
         stage.setTitle("Alle accounts in myTurn");
         stage.setScene(scene);
         stage.show();
+
+        Button naarHomescreen = new Button("Homepage!");
+        naarHomescreen.setOnAction(e -> {
+            Homescreen homescreen = new Homescreen(stage);
+            Scene homescreenScene = new Scene(homescreen, 800, 600);
+            stage.setScene(homescreen.getScene());
+            stage.show();
+        });
 
         // VBox waar de accounts in komen te staan
         VBox content = new VBox(10);

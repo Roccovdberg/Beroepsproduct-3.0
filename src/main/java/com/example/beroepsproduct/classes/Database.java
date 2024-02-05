@@ -46,16 +46,6 @@ public class Database {
         }
     }
 
-    public void bekijkProduct(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
-        try {
-            Statement stm = this.conn.createStatement();
-            String s = "SELECT  FROM product (Productnaam, Productuitleendatum, Productteruggeefdatum, Productbeschrijving, Productadres, Productid) VALUES ('" + productNaam + "', '" + productUitleendatum + "', '" + productTeruggeefdatum + "', '" + productBeschrijving + "', '" + productAdres + "')";
-            stm.execute(s);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void updateProduct(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
         try {

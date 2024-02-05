@@ -82,7 +82,6 @@ public class Toevoegen {
                 db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                // Mogelijk foutbeheer toevoegen om de gebruiker op de hoogte te stellen van problemen bij het toevoegen van het product.
             }
         });
 
