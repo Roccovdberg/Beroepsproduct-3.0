@@ -4,20 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Inloggen {
+    private String gebruikersNaam;
+    private String wachtWoord;
 
-    private Statement stm;
-    private Database db;
-    public Inloggen(){
-        this.db = new Database();
-
-    }
-    public void Maakaccount(){
-
-
-
-    }
-
-
-    public void Maakaccount(String gebruikersNaam, String wachtWoord) {
-    }
 }

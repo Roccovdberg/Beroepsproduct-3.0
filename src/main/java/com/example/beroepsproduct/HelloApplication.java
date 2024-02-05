@@ -60,7 +60,7 @@ public class HelloApplication extends Application {
         naarHomescreen.setOnAction(e -> {
             Homescreen homescreen = new Homescreen(stage);
             Scene homescreenScene = new Scene(homescreen, 800, 600);
-            stage.setScene(homescreenScene);
+            stage.setScene(homescreen.getScene());
             stage.show();
         });
         // Elementen toevoegen aan de GridPane

@@ -1,43 +1,30 @@
 package com.example.beroepsproduct.classes;
-
-import javafx.scene.Node;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class Product extends Node {
-
-    private Statement stm;
-    private Database db;
-    public Product(ResultSet producten){
-        this.db = new Database();
-
-    }
-
-    public void addProduct(){
-
-        String s = "INSERT....";
-        try {
-            stm = db.getConnection().createStatement();
-            stm.execute(s);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+import java.sql.Date;
 
 
-    }
+public class Product {
+//Data dat hoort bij een product
+private String productNaam;
+private Date productUitleendatum;
+private Date productTeruggeefdatum;
+private String productBeschrijving;
+private final String productAdres;
 
-    public void wijzigProduct(){
-
-    }
-
-    public void delProduct(int id){
-
-    }
-
-    @Override
-    public Node getStyleableNode() {
-        return super.getStyleableNode();
-    }
+//Constructor maken bij product
+public Product(String productNaam, Date productUitleendatum, Date productTeruggeefdatum, String productBeschrijving, String productAdres) {
+    this.productNaam = productNaam;
+    this.productUitleendatum = productUitleendatum;
+    this.productTeruggeefdatum = productTeruggeefdatum;
+    this.productBeschrijving = productBeschrijving;
+    this.productAdres = productAdres;
+}
+    public String getProductNaam() {return productNaam;}
+    public void setProductNaam(String productNaam) {this.productNaam = productNaam;}
+    public Date getProductUitleendatum() {return productUitleendatum;}
+    public void setProductUitleendatum(Date productUitleendatum) {this.productUitleendatum = productUitleendatum;}
+    public Date getProductTeruggeefdatum() {return productTeruggeefdatum;}
+    public void setProductTeruggeefdatum(Date productTeruggeefdatum) {this.productTeruggeefdatum = productTeruggeefdatum;}
+    public String getProductBeschrijving() {return productBeschrijving;}
+    public void setProductBeschrijving(String productBeschrijving) {this.productBeschrijving = productBeschrijving;}
+    public String getProductAdres() {return productAdres;}
 }
