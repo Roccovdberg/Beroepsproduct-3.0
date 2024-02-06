@@ -1,6 +1,11 @@
 package com.example.beroepsproduct.classes;
 import java.sql.Date;
-
+import java.time.LocalDate;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 
 public class Product {
 //Data dat hoort bij een product
@@ -9,12 +14,13 @@ private Date productUitleendatum;
 private Date productTeruggeefdatum;
 private String productBeschrijving;
 private final String productAdres;
+    private Connection conn;
 
-//Constructor maken bij product
-public Product(String productNaam, Date productUitleendatum, Date productTeruggeefdatum, String productBeschrijving, String productAdres) {
+    //Constructor maken bij product
+public Product(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
     this.productNaam = productNaam;
-    this.productUitleendatum = productUitleendatum;
-    this.productTeruggeefdatum = productTeruggeefdatum;
+    this.productUitleendatum = Date.valueOf(productUitleendatum);
+    this.productTeruggeefdatum = Date.valueOf(productTeruggeefdatum);
     this.productBeschrijving = productBeschrijving;
     this.productAdres = productAdres;
 }
@@ -27,4 +33,5 @@ public Product(String productNaam, Date productUitleendatum, Date productTerugge
     public String getProductBeschrijving() {return productBeschrijving;}
     public void setProductBeschrijving(String productBeschrijving) {this.productBeschrijving = productBeschrijving;}
     public String getProductAdres() {return productAdres;}
+    
 }

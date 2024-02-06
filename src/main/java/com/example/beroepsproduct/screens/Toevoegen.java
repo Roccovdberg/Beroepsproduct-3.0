@@ -2,6 +2,7 @@ package com.example.beroepsproduct.screens;
 
 import com.example.beroepsproduct.classes.Database;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -26,6 +27,7 @@ public class Toevoegen {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Product toevoegen");
 
+        //Lijst om een product toe te voegen
         Label naamLabel = new Label("Product Naam:");
         GridPane.setConstraints(naamLabel, 0, 0);
 
@@ -59,11 +61,9 @@ public class Toevoegen {
         Button voegToe = new Button("Voeg product toe");
         GridPane.setConstraints(voegToe, 1, 5);
 
-        root.getChildren().addAll(naamLabel, naamInput, uitleendatumLabel, uitleendatumInput, teruggeefdatumLabel, teruggeefdatumInput,
-                beschrijvingLabel, beschrijvingInput, productadresLabel, productadresInput, voegToe);
-
         Database db = new Database();
 
+        //Ingevulde informatie toevoegen aan de database
         voegToe.setOnAction(event -> {
             try {
                 String productNaam = naamInput.getText();
@@ -76,18 +76,25 @@ public class Toevoegen {
 
                 String productBeschrijving = beschrijvingInput.getText();
                 String productAdres = productadresInput.getText();
-
-
-                // Zorg ervoor dat de productAdres een string is voordat je deze naar de database stuurt.
                 db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            voegToe.setCursor(Cursor.HAND);
+
         });
+        Button naarHomescreen = new Button("Homepage!");
+        GridPane.setConstraints(naarHomescreen, 1, 6);
+
+        naarHomescreen.setOnAction(e -> {
+            Homescreen homescreen = new Homescreen(primaryStage);
+        });
+        naarHomescreen.setCursor(Cursor.HAND);
 
         primaryStage.show();
+        root.getChildren().addAll(naamLabel, naamInput, uitleendatumLabel, uitleendatumInput, teruggeefdatumLabel, teruggeefdatumInput,
+                beschrijvingLabel, beschrijvingInput, productadresLabel, productadresInput, voegToe, naarHomescreen);
     }
-
     public Scene getScene() {
         return scene;
     }

@@ -5,52 +5,72 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import javafx.stage.Stage;
 import java.sql.*;
+import java.time.LocalDate;
 
-public class Homescreen extends BorderPane {
+public class Homescreen {
 
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/beroepsproduct";
     private static final String DATABASE_USERNAME = "root";
     private static final String DATABASE_PASSWORD = "";
 
-    public Homescreen(Stage stage) {
-        // Maken van sidebar waar pagina's komen te staan
+
+    public Homescreen(Stage primaryStage) {
+        BorderPane root = new BorderPane();
+        // Sidebar waar pagina's komen te staan
         FlowPane blokje = new FlowPane();
         blokje.setStyle("-fx-background-color: #292c33");
         blokje.setPrefSize(100, 30);
         blokje.setOrientation(Orientation.VERTICAL);
 
-        // Titel van de applicatie rechts boven in het scherm
+        // Titel van de applicatie links boven in het scherm
         Label logo = new Label("MyTurn");
         logo.setPrefSize(100, 40);
         logo.setStyle("-fx-background-color: #ffffff;");
         logo.setAlignment(Pos.CENTER);
 
         // Button om product toe te voegen
-        Button Toevoegen = new Button("Voeg toe");
+        Button Toevoegen = new Button("Voeg product toe");
         Toevoegen.setStyle("-fx-background-color: #ff0000;");
         Toevoegen.setPrefSize(100, 40);
 
         Toevoegen.setOnAction(e -> {
-            Toevoegen toevoegen = new Toevoegen(stage);
-            stage.setScene(toevoegen.getScene());
-            stage.show();
+            Toevoegen toevoegen = new Toevoegen(primaryStage);
+            primaryStage.setScene(toevoegen.getScene());
+            primaryStage.show();
         });
-        blokje.getChildren().addAll(logo, Toevoegen);
-        setLeft(blokje);
 
-        // Tableview waar de producten in komen te staan
-        TableView<Product> tableView = new TableView<>(); // Specificeer het type van TableView
+        // Button om contract te maken toe te voegen
+        Button Contract = new Button("Contract maken");
+        Contract.setStyle("-fx-background-color: #ff0000;");
+        Contract.setPrefSize(100, 40);
+
+        Contract.setCursor(Cursor.HAND);
+
+        Contract.setOnAction(e -> {
+            Contractmaken contract = new Contractmaken(primaryStage);
+            primaryStage.setScene(contract.getScene());
+            primaryStage.show();
+        });
+        primaryStage.setScene(new Scene(root, 800, 600));
+        blokje.getChildren().addAll(logo, Toevoegen, Contract);
+        root.setLeft(blokje);
+
+        // TableView waar de producten in komen te staan
+        TableView<Product> tableView = new TableView<>();
 
         TableColumn<Product, String> col1 = new TableColumn<>("Productnaam");
-        TableColumn<Product, Date> col2 = new TableColumn<>("Uitleendatum");
-        TableColumn<Product, Date> col3 = new TableColumn<>("Teruggeefdatum");
+        TableColumn<Product, LocalDate> col2 = new TableColumn<>("Uitleendatum");
+        TableColumn<Product, LocalDate> col3 = new TableColumn<>("Teruggeefdatum");
         TableColumn<Product, String> col4 = new TableColumn<>("Productbeschrijving");
         TableColumn<Product, String> col5 = new TableColumn<>("Productadres");
 
@@ -66,7 +86,8 @@ public class Homescreen extends BorderPane {
         ObservableList<Product> productList = getProductsFromDatabase();
         tableView.setItems(productList);
 
-        // Voeg een listener toe om het gedetailleerde scherm te openen wanneer op een item wordt geklikt
+        tableView.setCursor(Cursor.HAND);
+        //Nieuw scherm laten zien met meer informatie over het product als er op het product geclickt wordt
         tableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
@@ -75,8 +96,8 @@ public class Homescreen extends BorderPane {
                 }
             }
         });
-
-        setCenter(tableView); // Voeg de TableView toe aan het midden van het Homescreen
+        // Voeg de TableView toe aan het midden van het Homescreen
+        root.setCenter(tableView);
     }
 
     // Methode om productgegevens uit de database op te halen
@@ -84,13 +105,13 @@ public class Homescreen extends BorderPane {
         ObservableList<Product> productList = FXCollections.observableArrayList();
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-             Statement statement = connection.createStatement();
+             Statement statement = ((Connection) connection).createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM product;")) {
 
             while (resultSet.next()) {
                 String productNaam = resultSet.getString("productNaam");
-                Date productUitleendatum = resultSet.getDate("productUitleendatum");
-                Date productTeruggeefdatum = resultSet.getDate("productTeruggeefdatum");
+                LocalDate productUitleendatum = resultSet.getDate("productUitleendatum").toLocalDate();
+                LocalDate productTeruggeefdatum = resultSet.getDate("productTeruggeefdatum").toLocalDate();
                 String productBeschrijving = resultSet.getString("productBeschrijving");
                 String productAdres = resultSet.getString("productAdres");
 
@@ -100,7 +121,6 @@ public class Homescreen extends BorderPane {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return productList;
     }
 
@@ -149,7 +169,7 @@ public class Homescreen extends BorderPane {
 
         //Button om een product te verwijderen uit de database
         Button deleteButton = new Button("Verwijder product");
-        deleteButton.setOnMouseClicked(event -> {
+        deleteButton.setOnAction(event -> {
             try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
                 String deleteQuery = "DELETE FROM product WHERE productNaam =?";
 
@@ -165,6 +185,7 @@ public class Homescreen extends BorderPane {
             // Sluit het scherm na het verwijderen
             detailStage.close();
         });
+        deleteButton.setCursor(Cursor.HAND);
 
         detailLayout.getChildren().addAll(
                 new Label("Naam:"),
@@ -185,4 +206,6 @@ public class Homescreen extends BorderPane {
         detailStage.setScene(detailScene);
         detailStage.show();
     }
+
+
 }

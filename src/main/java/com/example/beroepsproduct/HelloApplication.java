@@ -1,12 +1,11 @@
 package com.example.beroepsproduct;
 
-import com.example.beroepsproduct.screens.AlleAccounts;
 import com.example.beroepsproduct.screens.Homescreen;
 import com.example.beroepsproduct.screens.Login;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,70 +18,58 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     @Override
-    //Scherm aanmaken
+    // Scherm aanmaken
+
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(new GridPane(), 800, 600);
-        ((GridPane) scene.getRoot()).add(new Homescreen(stage), 0, 0);
+        GridPane loginGridPane = new GridPane(); // GridPane voor inlogscherm
+        loginGridPane.setPadding(new Insets(20));
+        loginGridPane.setVgap(10);
+        loginGridPane.setAlignment(Pos.CENTER);
 
-        // GridPane voor het opmaken van de lay-out
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(20));
-        gridPane.setVgap(10);
-        gridPane.setAlignment(Pos.CENTER);
+        GridPane mainGridPane = new GridPane(); // GridPane voor hoofdscherm
+        mainGridPane.setPadding(new Insets(20));
+        mainGridPane.setVgap(10);
+        mainGridPane.setAlignment(Pos.CENTER);
 
-        // Gebruikersnaam label en inputveld
         Label usernameLabel = new Label("Gebruikersnaam:");
         TextField usernameInput = new TextField();
 
-        // Wachtwoord label en inputveld
         Label passwordLabel = new Label("Wachtwoord:");
         PasswordField passwordInput = new PasswordField();
 
-        // Button om een account aan te maken
         Button inloggen = new Button("Maak account aan");
         inloggen.setOnAction(e -> {
-            stage.setScene(new Login(stage).getScene());
+            Login login = new Login(stage);
+            Scene loginScene = new Scene(login.getScene().getRoot(), 800, 600);
+            stage.setScene(loginScene);
             stage.show();
         });
-        // Button om alle toegevoegde accounts te bekijken
-        Button alleAccounts = new Button("Bekijk alle accounts");
-        alleAccounts.setOnAction(e -> {
-            stage.setScene(new Scene(new AlleAccounts(stage)));
-            stage.show();
-        });
+        inloggen.setCursor(Cursor.HAND);
 
-        // Inloggen button
         Button loginButton = new Button("Inloggen");
-        loginButton.setOnAction(e -> handleLogin(usernameInput.getText(), passwordInput.getText()));
+        //oginButton.setOnAction(e -> handleLogin(usernameInput.getText(), passwordInput.getText(), new Homescreen(stage)));
+        loginButton.setCursor(Cursor.HAND);
 
-        // Button om naar het homescreen te gaan
         Button naarHomescreen = new Button("Homepage!");
         naarHomescreen.setOnAction(e -> {
             Homescreen homescreen = new Homescreen(stage);
-            Scene homescreenScene = new Scene(homescreen, 800, 600);
-            stage.setScene(homescreen.getScene());
-            stage.show();
         });
-        // Elementen toevoegen aan de GridPane
-        gridPane.add(usernameLabel, 0, 0);
-        gridPane.add(usernameInput, 1, 0);
-        gridPane.add(passwordLabel, 0, 1);
-        gridPane.add(passwordInput, 1, 1);
-        gridPane.add(inloggen, 0, 2);
-        gridPane.add(loginButton, 1, 2);
-        gridPane.add(naarHomescreen, 0, 3);
-        gridPane.add(alleAccounts, 1, 3);
+        naarHomescreen.setCursor(Cursor.HAND);
 
-        scene.setRoot(gridPane);
+        loginGridPane.add(usernameLabel, 0, 0);
+        loginGridPane.add(usernameInput, 1, 0);
+        loginGridPane.add(passwordLabel, 0, 1);
+        loginGridPane.add(passwordInput, 1, 1);
+        loginGridPane.add(inloggen, 0, 2);
+        loginGridPane.add(loginButton, 1, 2);
+        loginGridPane.add(naarHomescreen, 0, 3);
 
-        // Titel instellen en Scene tonen
+        Scene loginScene = new Scene(loginGridPane, 800, 600); // Inlogscene
+
         stage.setTitle("MyTurn");
-        stage.setScene(scene);
+        stage.setScene(loginScene); // Stel inlogscene in als begin scene
         stage.show();
     }
 
-    private void handleLogin(String username, String password) {
-        // Plaats hier je login validatie logica
-        System.out.println("Inlogpoging met gebruikersnaam: " + username + " en wachtwoord: " + password);
-    }
+
 }
