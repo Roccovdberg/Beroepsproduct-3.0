@@ -76,9 +76,9 @@ public class Database {
     }
 
     // Database verbinding voor Contract toevoegen
-    public void VoegContractToe(String productNaam, int contractnummer, String uitlenerHandtekening, String lenerHandtekening, int schadevergoeding) {
+    public void VoegContractToe(String contractProduct, int contractnummer, String uitlenerHandtekening, String lenerHandtekening, int schadevergoeding) {
         try (Statement stm = this.conn.createStatement()) {
-            String s = "INSERT INTO Contract(Productnaam, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding) VALUES ('" + productNaam + "', '" + contractnummer + "', '" + uitlenerHandtekening + "', '" + lenerHandtekening + "', '" + schadevergoeding + "')";
+            String s = "INSERT INTO Contract(contractproduct, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding) VALUES ('" + contractProduct + "', '" + contractnummer + "', '" + uitlenerHandtekening + "', '" + lenerHandtekening + "', '" + schadevergoeding + "')";
             stm.execute(s);
             System.out.println("Contract toegevoegd");
 

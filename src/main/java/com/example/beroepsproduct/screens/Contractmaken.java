@@ -27,8 +27,8 @@ public class Contractmaken {
         Label productNaamLabel = new Label("Productnaam");
         GridPane.setConstraints(productNaamLabel, 0, 0);
 
-        TextField productNaamInput = new TextField();
-        GridPane.setConstraints(productNaamInput, 1, 0);
+        TextField contractproductInput = new TextField();
+        GridPane.setConstraints(contractproductInput, 1, 0);
 
         Label contractnummerLabel = new Label("Contractnummer");
         GridPane.setConstraints(contractnummerLabel, 0, 1);
@@ -58,16 +58,16 @@ public class Contractmaken {
         GridPane.setConstraints(voegToe, 1, 5);
 
         Database db = new Database();
-//Als op Button voegToe wordt gedrukt de ingevulde velden omzetten en toevoegen aan de database
+        //Als op Button voegToe wordt gedrukt de ingevulde velden omzetten en toevoegen aan de database
         voegToe.setOnAction(event -> {
             try {
-                String productnaam = productNaamInput.getText();
+                String contractproduct = contractproductInput.getText();
                 int contractnummer = Integer.parseInt(contractnummerInput.getText());
                 String uitlenerHandtekening = uitlenerHandtekeningInput.getText();
                 String lenerHandtekening = lenerHandtekeningInput.getText();
                 int schadevergoeding = Integer.parseInt(schadevergoedingInput.getText());
 
-                db.VoegContractToe(productnaam, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding);
+                db.VoegContractToe(contractproduct, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding);
             } catch (NumberFormatException ex) {
                 System.out.println("");
             } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class Contractmaken {
         });
         naarHomescreen.setCursor(Cursor.HAND);
         //Alles van de lijst op het scherm laten zien
-        root.getChildren().addAll(productNaamLabel, productNaamInput, contractnummerLabel, contractnummerInput,
+        root.getChildren().addAll(productNaamLabel, contractproductInput, contractnummerLabel, contractnummerInput,
                 uitlenerHandtekeningLabel, uitlenerHandtekeningInput, lenerHandtekeningLabel, lenerHandtekeningInput,
                 schadevergoedingLabel, schadevergoedingInput, voegToe, naarHomescreen);
     }
