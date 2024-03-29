@@ -1,6 +1,8 @@
 package com.example.beroepsproduct.screens;
 
 import com.example.beroepsproduct.classes.Product;
+import com.example.beroepsproduct.screens.Contractmaken;
+import com.example.beroepsproduct.screens.Toevoegen;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -13,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Stage;
+
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -22,7 +24,6 @@ public class Homescreen {
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/beroepsproduct";
     private static final String DATABASE_USERNAME = "root";
     private static final String DATABASE_PASSWORD = "";
-
 
     public Homescreen(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -39,11 +40,11 @@ public class Homescreen {
         logo.setAlignment(Pos.CENTER);
 
         // Button om product toe te voegen
-        Button Toevoegen = new Button("Voeg product toe");
-        Toevoegen.setStyle("-fx-background-color: #ff0000;");
-        Toevoegen.setPrefSize(100, 40);
+        Button voegToe = new Button("Voeg product toe");
+        voegToe.setStyle("-fx-background-color: #ff0000;");
+        voegToe.setPrefSize(100, 40);
 
-        Toevoegen.setOnAction(e -> {
+        voegToe.setOnAction(e -> {
             Toevoegen toevoegen = new Toevoegen(primaryStage);
             primaryStage.setScene(toevoegen.getScene());
             primaryStage.show();
@@ -62,7 +63,7 @@ public class Homescreen {
             primaryStage.show();
         });
         primaryStage.setScene(new Scene(root, 800, 600));
-        blokje.getChildren().addAll(logo, Toevoegen, Contract);
+        blokje.getChildren().addAll(logo, voegToe, Contract);
         root.setLeft(blokje);
 
         // TableView waar de producten in komen te staan
@@ -105,8 +106,8 @@ public class Homescreen {
         ObservableList<Product> productList = FXCollections.observableArrayList();
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-             Statement statement = ((Connection) connection).createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM product;")) {
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM product")) {
 
             while (resultSet.next()) {
                 String productNaam = resultSet.getString("productNaam");
@@ -206,6 +207,4 @@ public class Homescreen {
         detailStage.setScene(detailScene);
         detailStage.show();
     }
-
-
 }

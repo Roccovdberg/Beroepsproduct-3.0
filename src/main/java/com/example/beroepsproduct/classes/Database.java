@@ -12,6 +12,7 @@ public class Database {
     private String host = "localhost";
 
     public Database() {
+        //Verbinding Database
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.conn = DriverManager.getConnection("jdbc:mysql://" + host + "/beroepsproduct", "root", "");
@@ -24,7 +25,7 @@ public class Database {
         return this.conn;
     }
 
-    // Database verbinding voor account maken
+    // Query voor account maken
     public void Maakaccount(String gebruikersNaam, String wachtWoord) {
         try (Statement stm = this.conn.createStatement()) {
             String s = "INSERT INTO account(Accountnaam, Accountwachtwoord) VALUES ('" + gebruikersNaam + "', '" + wachtWoord + "')";
@@ -36,7 +37,7 @@ public class Database {
         }
     }
 
-    // Database verbinding voor Product toevoegen
+    // Query voor Product toevoegen
     public void VoegProductToe(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
         try (Statement stm = this.conn.createStatement()) {
             String s = "INSERT INTO product(Productnaam, Productuitleendatum, Productteruggeefdatum, Productbeschrijving, Productadres) VALUES ('" + productNaam + "', '" + productUitleendatum + "', '" + productTeruggeefdatum + "', '" + productBeschrijving + "', '" + productAdres + "')";
@@ -47,7 +48,29 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-    // Database verbinding voor Product updaten
+
+//Query voor Index op product toevoegen
+    public void createIndexProduct() {
+        try (Statement stm = this.conn.createStatement()) {
+            String query = "CREATE INDEX idx_productnaam ON product(Productnaam)";
+            stm.execute(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Query voor Sorteren op Productnamen
+    public void GroupByVoegProductToe() {
+        try (Statement stm = this.conn.createStatement()) {
+            String query = "SELECT Productnaam FROM product GROUP BY Productnaam";
+            stm.execute(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    // Query voor Product updaten
     public void updateProduct(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
         try (Statement stm = this.conn.createStatement()) {
             String updateQuery = "UPDATE product SET "
@@ -64,7 +87,7 @@ public class Database {
         }
     }
 
-    // Database verbinding voor Product verwijderen
+    //Query voor Product verwijderen
     public void verwijderProduct(String productNaam, LocalDate productUitleendatum, LocalDate productTeruggeefdatum, String productBeschrijving, String productAdres) {
         try (Statement stm = this.conn.createStatement()) {
             String s = "DELETE FROM product WHERE Productnaam = '" + productNaam + "'";
@@ -75,7 +98,7 @@ public class Database {
         }
     }
 
-    // Database verbinding voor Contract toevoegen
+    //Query voor Contract toevoegen
     public void VoegContractToe(String contractProduct, int contractnummer, String uitlenerHandtekening, String lenerHandtekening, int schadevergoeding) {
         try (Statement stm = this.conn.createStatement()) {
             String s = "INSERT INTO Contract(contractproduct, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding) VALUES ('" + contractProduct + "', '" + contractnummer + "', '" + uitlenerHandtekening + "', '" + lenerHandtekening + "', '" + schadevergoeding + "')";

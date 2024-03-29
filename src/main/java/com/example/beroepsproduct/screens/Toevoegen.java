@@ -77,6 +77,7 @@ public class Toevoegen {
                 String productBeschrijving = beschrijvingInput.getText();
                 String productAdres = productadresInput.getText();
                 db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
+                db.createIndexProduct();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
