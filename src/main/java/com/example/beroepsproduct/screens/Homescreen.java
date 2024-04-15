@@ -1,8 +1,7 @@
 package com.example.beroepsproduct.screens;
 
+import com.example.beroepsproduct.classes.Database;
 import com.example.beroepsproduct.classes.Product;
-import com.example.beroepsproduct.screens.Contractmaken;
-import com.example.beroepsproduct.screens.Toevoegen;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -21,11 +20,12 @@ import java.time.LocalDate;
 
 public class Homescreen {
 
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/beroepsproduct";
-    private static final String DATABASE_USERNAME = "root";
-    private static final String DATABASE_PASSWORD = "";
+    private static final String DATABASE_URL = "jdbc:mysql://adainforma.tk:3306/bp2_myturn";
+    private static final String DATABASE_USERNAME = "myturn";
+    private static final String DATABASE_PASSWORD = "800u~1Tsd";
 
     public Homescreen(Stage primaryStage) {
+        Database db = new Database();
         BorderPane root = new BorderPane();
         // Sidebar waar pagina's komen te staan
         FlowPane blokje = new FlowPane();
@@ -51,19 +51,20 @@ public class Homescreen {
         });
 
         // Button om contract te maken toe te voegen
-        Button Contract = new Button("Contract maken");
-        Contract.setStyle("-fx-background-color: #ff0000;");
-        Contract.setPrefSize(100, 40);
+        Button contract = new Button("Contract maken");
+        contract.setStyle("-fx-background-color: #ff0000;");
+        contract.setPrefSize(100, 40);
 
-        Contract.setCursor(Cursor.HAND);
+        contract.setCursor(Cursor.HAND);
 
-        Contract.setOnAction(e -> {
-            Contractmaken contract = new Contractmaken(primaryStage);
-            primaryStage.setScene(contract.getScene());
+        contract.setOnAction(e -> {
+            Contractmaken contractmaken = new Contractmaken(primaryStage);
+            primaryStage.setScene(contractmaken.getScene());
             primaryStage.show();
         });
+
         primaryStage.setScene(new Scene(root, 800, 600));
-        blokje.getChildren().addAll(logo, voegToe, Contract);
+        blokje.getChildren().addAll(logo, voegToe, contract);
         root.setLeft(blokje);
 
         // TableView waar de producten in komen te staan
@@ -82,6 +83,12 @@ public class Homescreen {
         col5.setCellValueFactory(new PropertyValueFactory<>("productAdres"));
 
         tableView.getColumns().addAll(col1, col2, col3, col4, col5);
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                Database.GroupByVoegProductToe();
+            }
+        });
 
         // Gegevens ophalen uit de database en toevoegen aan de TableView
         ObservableList<Product> productList = getProductsFromDatabase();
@@ -107,7 +114,7 @@ public class Homescreen {
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM product")) {
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM product GROUP BY productNaam ORDER BY productNaam ASC")) {
 
             while (resultSet.next()) {
                 String productNaam = resultSet.getString("productNaam");
@@ -142,13 +149,13 @@ public class Homescreen {
         Button saveButton = new Button("Opslaan");
         saveButton.setOnAction(e -> {
             try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
-                String updateQuery = "UPDATE product SET " +
-                        "productNaam = ?, " +
-                        "productUitleendatum = ?, " +
-                        "productTeruggeefdatum = ?, " +
-                        "productBeschrijving = ?, " +
-                        "productAdres = ? " +
-                        "WHERE productNaam = ?";
+                String updateQuery = "UPDATE product SET "
+                        + "productNaam = ?, "
+                        + "productUitleendatum = ?, "
+                        + "productTeruggeefdatum = ?, "
+                        + "productBeschrijving = ?, "
+                        + "productAdres = ? "
+                        + "WHERE productNaam = ?";
 
                 try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                     preparedStatement.setString(1, nameTextField.getText());
@@ -172,7 +179,7 @@ public class Homescreen {
         Button deleteButton = new Button("Verwijder product");
         deleteButton.setOnAction(event -> {
             try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
-                String deleteQuery = "DELETE FROM product WHERE productNaam =?";
+                String deleteQuery = "DELETE FROM product WHERE productNaam = ?";
 
                 try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
                     preparedStatement.setString(1, product.getProductNaam());

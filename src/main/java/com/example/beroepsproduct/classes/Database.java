@@ -1,21 +1,18 @@
 package com.example.beroepsproduct.classes;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class Database {
 
-    private Connection conn;
-    private String host = "localhost";
+    private static Connection conn;
+    private String host = "adainforma.tk";
 
     public Database() {
         //Verbinding Database
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + host + "/beroepsproduct", "root", "");
+            this.conn = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/bp2_myturn", "myturn", "800u~1Tsd");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,19 +46,28 @@ public class Database {
         }
     }
 
-//Query voor Index op product toevoegen
-    public void createIndexProduct() {
+    //Query voor Index op product toevoegen
+    public void maakIndexProduct() {
         try (Statement stm = this.conn.createStatement()) {
-            String query = "CREATE INDEX idx_productnaam ON product(Productnaam)";
-            stm.execute(query);
+            // Check if index exists
+            ResultSet rs = stm.executeQuery("SHOW INDEX FROM product WHERE Key_name = 'idx_productnaam'");
+            if (!((ResultSet) rs).next()) {
+                // Index does not exist, so create it
+                String query = "CREATE INDEX idx_productnaam ON product(Productnaam)";
+                stm.execute(query);
+                System.out.println("Index 'idx_productnaam' created.");
+            } else {
+                System.out.println("Index 'idx_productnaam' already exists.");
+
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     //Query voor Sorteren op Productnamen
-    public void GroupByVoegProductToe() {
-        try (Statement stm = this.conn.createStatement()) {
+    public static void GroupByVoegProductToe() {
+        try (Statement stm = conn.createStatement()) {
             String query = "SELECT Productnaam FROM product GROUP BY Productnaam";
             stm.execute(query);
         } catch (SQLException e) {

@@ -28,7 +28,7 @@ public class Toevoegen {
         primaryStage.setTitle("Product toevoegen");
 
         //Lijst om een product toe te voegen
-        Label naamLabel = new Label("Product Naam:");
+        Label naamLabel = new Label("Product naam:");
         GridPane.setConstraints(naamLabel, 0, 0);
 
         TextField naamInput = new TextField();
@@ -77,7 +77,7 @@ public class Toevoegen {
                 String productBeschrijving = beschrijvingInput.getText();
                 String productAdres = productadresInput.getText();
                 db.VoegProductToe(productNaam, productUitleendatum.toLocalDate(), productTeruggeefdatum.toLocalDate(), productBeschrijving, productAdres);
-                db.createIndexProduct();
+                db.maakIndexProduct();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -92,9 +92,10 @@ public class Toevoegen {
         });
         naarHomescreen.setCursor(Cursor.HAND);
 
-        primaryStage.show();
         root.getChildren().addAll(naamLabel, naamInput, uitleendatumLabel, uitleendatumInput, teruggeefdatumLabel, teruggeefdatumInput,
                 beschrijvingLabel, beschrijvingInput, productadresLabel, productadresInput, voegToe, naarHomescreen);
+        primaryStage.show();
+
     }
     public Scene getScene() {
         return scene;
