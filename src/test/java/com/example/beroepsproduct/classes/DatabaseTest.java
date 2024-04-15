@@ -18,7 +18,7 @@ class DatabaseTest {
     void setup() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/beroepsproduct", "root", "");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://adainforma.tk:3306/bp2_myturn", "myturn", "800u~1Tsd");
             db = new Database();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -40,6 +40,16 @@ class DatabaseTest {
         String productBeschrijving = "Dit is een testproduct";
         String productAdres = "Teststraat 123";
         db.VoegProductToe(productNaam, productUitleendatum, productTeruggeefdatum, productBeschrijving, productAdres);
+    }
+
+    @Test
+    void maakIndexProduct() {
+        db.maakIndexProduct();
+    }
+
+    @Test
+    void GroupByProductNaam() {
+        db.GroupByProductNaam();
     }
 
     @Test

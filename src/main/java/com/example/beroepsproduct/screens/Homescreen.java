@@ -86,7 +86,7 @@ public class Homescreen {
 
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                Database.GroupByVoegProductToe();
+                Database.GroupByProductNaam();
             }
         });
 

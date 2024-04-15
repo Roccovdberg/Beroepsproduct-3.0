@@ -66,7 +66,7 @@ public class Database {
     }
 
     //Query voor Sorteren op Productnamen
-    public static void GroupByVoegProductToe() {
+    public static void GroupByProductNaam() {
         try (Statement stm = conn.createStatement()) {
             String query = "SELECT Productnaam FROM product GROUP BY Productnaam";
             stm.execute(query);
@@ -107,7 +107,7 @@ public class Database {
     //Query voor Contract toevoegen
     public void VoegContractToe(String contractProduct, int contractnummer, String uitlenerHandtekening, String lenerHandtekening, int schadevergoeding) {
         try (Statement stm = this.conn.createStatement()) {
-            String s = "INSERT INTO Contract(contractproduct, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding) VALUES ('" + contractProduct + "', '" + contractnummer + "', '" + uitlenerHandtekening + "', '" + lenerHandtekening + "', '" + schadevergoeding + "')";
+            String s = "INSERT INTO contract(contractproduct, contractnummer, uitlenerHandtekening, lenerHandtekening, schadevergoeding) VALUES ('" + contractProduct + "', '" + contractnummer + "', '" + uitlenerHandtekening + "', '" + lenerHandtekening + "', '" + schadevergoeding + "')";
             stm.execute(s);
             System.out.println("Contract toegevoegd");
 
